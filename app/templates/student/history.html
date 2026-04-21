@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Application History{% endblock %}
+
+{% block content %}
+<h3 class="fw-bold mb-4"><i class="bi bi-clock-history text-primary"></i> Application History</h3>
+
+{% if applications %}
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Package</th>
+            <th>Applied On</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td class="fw-semibold">{{ app.drive.job_title }}</td>
+            <td>{{ app.drive.company.company_name }}</td>
+            <td>{{ app.drive.package_lpa ~ ' LPA' if app.drive.package_lpa else '—' }}</td>
+            <td>{{ app.applied_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+            <td>
+                <span class="badge
+                    {% if app.status == 'selected' %}bg-success
+                    {% elif app.status == 'shortlisted' %}bg-primary
+                    {% elif app.status == 'rejected' %}bg-danger
+                    {% else %}bg-secondary{% endif %}">
+                    {{ app.status|capitalize }}
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<div class="alert alert-light border text-center">
+    No applications yet. <a href="{{ url_for('student.dashboard') }}">Browse drives</a>
+</div>
+{% endif %}
+{% endblock %}

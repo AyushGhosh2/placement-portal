@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Applicants — {{ drive.job_title }}{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('company.dashboard') }}" class="btn btn-outline-secondary btn-sm mb-3">← Back</a>
+<h3 class="fw-bold mb-1">{{ drive.job_title }} — Applicants</h3>
+<p class="text-muted">{{ applications|length }} total application(s)</p>
+
+{% if applications %}
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Roll No.</th>
+            <th>Dept.</th>
+            <th>CGPA</th>
+            <th>Resume</th>
+            <th>Applied On</th>
+            <th>Status</th>
+            <th>Update</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td class="fw-semibold">{{ app.student.full_name }}</td>
+            <td><code>{{ app.student.roll_number }}</code></td>
+            <td>{{ app.student.department or '—' }}</td>
+            <td>{{ app.student.cgpa or '—' }}</td>
+            <td>
+                {% if app.student.resume_filename %}
+                <a href="{{ url_for('static', filename='uploads/' ~ app.student.resume_filename) }}"
+                   target="_blank" class="btn btn-sm btn-outline-info">View</a>
+                {% else %}
+                <span class="text-muted small">None</span>
+                {% endif %}
+            </td>
+            <td>{{ app.applied_at.strftime('%d %b %Y') }}</td>
+            <td>
+                <span class="badge
+                    {% if app.status == 'selected' %}bg-success
+                    {% elif app.status == 'shortlisted' %}bg-primary
+                    {% elif app.status == 'rejected' %}bg-danger
+                    {% else %}bg-secondary{% endif %}">
+                    {{ app.status|capitalize }}
+                </span>
+            </td>
+            <td>
+                <form method="POST" action="{{ url_for('company.update_application', app_id=app.id) }}">
+                    <div class="d-flex gap-1">
+                        <select name="status" class="form-select form-select-sm">
+                            <option value="applied" {% if app.status=='applied' %}selected{% endif %}>Applied</option>
+                            <option value="shortlisted" {% if app.status=='shortlisted' %}selected{% endif %}>Shortlisted</option>
+                            <option value="selected" {% if app.status=='selected' %}selected{% endif %}>Selected</option>
+                            <option value="rejected" {% if app.status=='rejected' %}selected{% endif %}>Rejected</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<div class="alert alert-light border text-center">No applications yet for this drive.</div>
+{% endif %}
+{% endblock %}

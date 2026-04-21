@@ -1,0 +1,54 @@
+/* ── PlacementHub Custom Styles ── */
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Navbar brand feel */
+.navbar-brand {
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+}
+
+/* Card hover lift effect */
+.hover-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    color: inherit;
+}
+.hover-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1) !important;
+    color: inherit;
+}
+
+/* Table improvements */
+.table th {
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Form card look */
+.card {
+    border-radius: 12px;
+}
+
+/* Badge sizing */
+.badge {
+    font-size: 0.78rem;
+    padding: 5px 10px;
+}
+
+/* Flash message spacing */
+.alert {
+    border-radius: 10px;
+}
+
+/* Drive cards */
+.drive-card {
+    transition: box-shadow 0.2s;
+}
+.drive-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}

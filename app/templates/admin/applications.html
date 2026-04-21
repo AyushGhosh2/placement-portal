@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Applications for {{ drive.job_title }}{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('admin.drives') }}" class="btn btn-outline-secondary btn-sm mb-3">
+    ← Back to Drives
+</a>
+<h3 class="fw-bold mb-1">{{ drive.job_title }}</h3>
+<p class="text-muted">{{ drive.company.company_name }} — {{ applications|length }} application(s)</p>
+
+<div class="table-responsive">
+<table class="table table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Student Name</th>
+            <th>Roll Number</th>
+            <th>Department</th>
+            <th>CGPA</th>
+            <th>Applied On</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.student.full_name }}</td>
+            <td><code>{{ app.student.roll_number }}</code></td>
+            <td>{{ app.student.department or '—' }}</td>
+            <td>{{ app.student.cgpa or '—' }}</td>
+            <td>{{ app.applied_at.strftime('%d %b %Y') }}</td>
+            <td>
+                <span class="badge
+                    {% if app.status == 'selected' %}bg-success
+                    {% elif app.status == 'shortlisted' %}bg-primary
+                    {% elif app.status == 'rejected' %}bg-danger
+                    {% else %}bg-secondary{% endif %}">
+                    {{ app.status|capitalize }}
+                </span>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center text-muted">No applications yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

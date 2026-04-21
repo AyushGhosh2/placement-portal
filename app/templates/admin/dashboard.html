@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h3 class="fw-bold mb-4"><i class="bi bi-speedometer2 text-primary"></i> Admin Dashboard</h3>
+
+<!-- Stats Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title">Total Students</h6>
+                <h2 class="fw-bold">{{ stats.total_students }}</h2>
+                <i class="bi bi-people-fill fs-1 opacity-25 float-end mt-n3"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title">Total Companies</h6>
+                <h2 class="fw-bold">{{ stats.total_companies }}</h2>
+                <i class="bi bi-building fs-1 opacity-25 float-end mt-n3"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title">Placement Drives</h6>
+                <h2 class="fw-bold">{{ stats.total_drives }}</h2>
+                <i class="bi bi-briefcase-fill fs-1 opacity-25 float-end mt-n3"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title">Total Applications</h6>
+                <h2 class="fw-bold">{{ stats.total_applications }}</h2>
+                <i class="bi bi-file-earmark-text-fill fs-1 opacity-25 float-end mt-n3"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pending Items Alerts -->
+{% if stats.pending_companies > 0 %}
+<div class="alert alert-warning">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <strong>{{ stats.pending_companies }}</strong> company registration(s) awaiting approval.
+    <a href="{{ url_for('admin.companies') }}" class="alert-link">Review now →</a>
+</div>
+{% endif %}
+
+{% if stats.pending_drives > 0 %}
+<div class="alert alert-info">
+    <i class="bi bi-info-circle-fill"></i>
+    <strong>{{ stats.pending_drives }}</strong> placement drive(s) awaiting approval.
+    <a href="{{ url_for('admin.drives') }}" class="alert-link">Review now →</a>
+</div>
+{% endif %}
+
+<!-- Quick Links -->
+<div class="row g-3 mt-2">
+    <div class="col-md-4">
+        <a href="{{ url_for('admin.students') }}" class="card text-decoration-none hover-card">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-person-lines-fill fs-2 text-primary"></i>
+                <p class="mt-2 fw-semibold">Manage Students</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('admin.companies') }}" class="card text-decoration-none hover-card">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-building-check fs-2 text-success"></i>
+                <p class="mt-2 fw-semibold">Manage Companies</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('admin.drives') }}" class="card text-decoration-none hover-card">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-clipboard2-check-fill fs-2 text-warning"></i>
+                <p class="mt-2 fw-semibold">Manage Drives</p>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

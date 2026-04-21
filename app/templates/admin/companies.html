@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Companies — Admin{% endblock %}
+
+{% block content %}
+<h3 class="fw-bold mb-4"><i class="bi bi-building text-success"></i> Companies</h3>
+
+<!-- Search -->
+<form method="GET" action="{{ url_for('admin.companies') }}" class="d-flex mb-4 gap-2">
+    <input type="text" name="search" value="{{ search }}" class="form-control" placeholder="Search by company name...">
+    <button type="submit" class="btn btn-outline-primary">Search</button>
+    {% if search %}
+    <a href="{{ url_for('admin.companies') }}" class="btn btn-outline-secondary">Clear</a>
+    {% endif %}
+</form>
+
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Company</th>
+            <th>HR Contact</th>
+            <th>Website</th>
+            <th>Status</th>
+            <th>Account</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for comp in companies %}
+        <tr>
+            <td>{{ comp.id }}</td>
+            <td class="fw-semibold">{{ comp.company_name }}</td>
+            <td>{{ comp.hr_contact or '—' }}</td>
+            <td>
+                {% if comp.website %}
+                <a href="{{ comp.website }}" target="_blank" class="small">Visit</a>
+                {% else %}—{% endif %}
+            </td>
+            <td>
+                {% if comp.approval_status == 'approved' %}
+                    <span class="badge bg-success">Approved</span>
+                {% elif comp.approval_status == 'pending' %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                {% else %}
+                    <span class="badge bg-danger">Rejected</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if comp.user.is_active %}
+                    <span class="badge bg-success">Active</span>
+                {% else %}
+                    <span class="badge bg-secondary">Blacklisted</span>
+                {% endif %}
+            </td>
+            <td>
+                <div class="d-flex gap-1 flex-wrap">
+                    {% if comp.approval_status == 'pending' %}
+                    <a href="{{ url_for('admin.approve_company', company_id=comp.id) }}"
+                       class="btn btn-sm btn-success">Approve</a>
+                    <a href="{{ url_for('admin.reject_company', company_id=comp.id) }}"
+                       class="btn btn-sm btn-warning">Reject</a>
+                    {% endif %}
+                    {% if comp.user.is_active %}
+                    <a href="{{ url_for('admin.blacklist_company', company_id=comp.id) }}"
+                       class="btn btn-sm btn-secondary"
+                       onclick="return confirm('Blacklist this company?')">Blacklist</a>
+                    {% endif %}
+                    <a href="{{ url_for('admin.delete_company', company_id=comp.id) }}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Delete this company permanently?')">Delete</a>
+                </div>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted">No companies found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
